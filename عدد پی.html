@@ -1,0 +1,236 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>عدد پی با چندضلعی‌ها</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky1:#eaf6ff; --sky2:#ffffff;
+  --navy:#0e1f4b; --navy2:#13285e;
+  --orange:#ff8a3d; --orange2:#ffb37a;
+  --ink:#0e1f4b; --paper:#ffffff;
+  --cardText:#eef3ff; --cardSub:#b9c6ea;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sky1:#0b1430; --sky2:#152043;
+    --ink:#eaf2ff; --paper:#101c3d;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; min-height:100%;
+  font-family:'Vazirmatn',sans-serif;
+  background:linear-gradient(160deg,var(--sky1),var(--sky2) 60%);
+  color:var(--ink);
+  display:flex; justify-content:center;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--sky1);z-index:10}
+.wrap{width:100%; max-width:860px; padding:34px 18px 60px; }
+header{text-align:center; margin-bottom:28px}
+header h1{font-size:clamp(22px,4vw,32px); font-weight:900; margin:0 0 8px}
+header p{color:var(--ink); opacity:.65; font-size:15px; margin:0; max-width:520px; margin-inline:auto}
+
+.card{
+  background:linear-gradient(155deg, rgba(14,31,75,.72), rgba(19,40,94,.6));
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,138,61,.35);
+  border-radius:22px;
+  box-shadow:0 18px 40px -20px rgba(14,31,75,.45), inset 0 1px 0 rgba(255,255,255,.08);
+  padding:26px 22px;
+  color:var(--cardText);
+  margin-bottom:24px;
+}
+.card h2{margin:0 0 4px; font-size:19px; font-weight:700; color:#fff}
+.card .lead{color:var(--cardSub); font-size:13.5px; margin:0 0 18px}
+
+.diagram-row{display:flex; gap:24px; flex-wrap:wrap; align-items:center; justify-content:center}
+.svgbox{flex:0 0 auto; width:min(280px,80vw)}
+.svgbox svg{width:100%; height:auto; display:block}
+
+.stats{flex:1 1 220px; display:flex; flex-direction:column; gap:10px; min-width:200px}
+.stat{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px; padding:10px 14px;
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
+}
+.stat .k{font-size:12.5px; color:var(--cardSub)}
+.stat .v{font-size:15px; font-weight:700; color:#fff; direction:ltr; font-variant-numeric: tabular-nums}
+.stat.pi{border-color:rgba(255,138,61,.55); background:rgba(255,138,61,.12)}
+.stat.pi .v{color:var(--orange2); font-size:17px}
+
+.sliderRow{margin-top:18px}
+.sliderRow label{display:flex; justify-content:space-between; font-size:13.5px; color:var(--cardSub); margin-bottom:8px}
+.sliderRow label b{color:var(--orange2); font-weight:700}
+input[type=range]{
+  width:100%; appearance:none; height:6px; border-radius:4px;
+  background:linear-gradient(90deg,var(--orange),var(--orange2));
+  outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  appearance:none; width:20px; height:20px; border-radius:50%;
+  background:#fff; border:3px solid var(--orange); cursor:pointer;
+}
+input[type=range]::-moz-range-thumb{
+  width:20px; height:20px; border-radius:50%;
+  background:#fff; border:3px solid var(--orange); cursor:pointer;
+}
+
+.digits{margin-top:16px; font-size:14px; line-height:1.9; direction:ltr; text-align:center; letter-spacing:1px}
+.digits .ok{color:var(--orange2); font-weight:700}
+.digits .bad{color:rgba(255,255,255,.35)}
+
+.poly-in{fill:rgba(255,138,61,.18); stroke:var(--orange); stroke-width:2}
+.poly-out{fill:none; stroke:#8fd1ff; stroke-width:2; stroke-dasharray:4 4}
+.circ{fill:rgba(255,255,255,.05); stroke:#fff; stroke-width:1.5}
+
+.kashani-row{display:flex; gap:22px; flex-wrap:wrap; align-items:center}
+.kashani-text{flex:1 1 260px; font-size:14.5px; line-height:2; color:var(--cardText)}
+.kashani-anim{flex:0 0 auto; width:min(220px,70vw); text-align:center}
+.kashani-anim svg{width:100%; height:auto}
+.kashani-anim .cap{margin-top:8px; font-size:13px; color:var(--orange2); direction:ltr; font-variant-numeric: tabular-nums}
+
+footer{text-align:center; font-size:12px; color:var(--ink); opacity:.5; margin-top:6px}
+
+@media (max-width:480px){
+  .diagram-row{flex-direction:column}
+  .kashani-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>عدد پی از دل یک دایره</h1>
+    <p>با محاط و محیط کردن یک n‌ضلعی منتظم بر دایره، به مقدار عدد پی نزدیک می‌شویم.</p>
+  </header>
+
+  <section class="card">
+    <h2>چندضلعی را خودت بساز</h2>
+    <p class="lead">تعداد اضلاع را تغییر بده و ببین عدد پی چطور دقیق‌تر می‌شود.</p>
+    <div class="diagram-row">
+      <div class="svgbox">
+        <svg id="mainSvg" viewBox="0 0 360 360">
+          <circle class="circ" cx="180" cy="180" r="140"></circle>
+          <polygon id="polyOut" class="poly-out" points=""></polygon>
+          <polygon id="polyIn" class="poly-in" points=""></polygon>
+        </svg>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="k">محیط n‌ضلعی محاط (داخل دایره)</span><span class="v" id="pIn">—</span></div>
+        <div class="stat"><span class="k">محیط n‌ضلعی محیط (خارج دایره)</span><span class="v" id="pOut">—</span></div>
+        <div class="stat pi"><span class="k">تخمین عدد پی</span><span class="v" id="piEst">—</span></div>
+      </div>
+    </div>
+    <div class="sliderRow">
+      <label>تعداد اضلاع (n) <b id="nLabel">6</b></label>
+      <input type="range" id="nSlider" min="3" max="120" value="6" step="1">
+    </div>
+    <div class="digits" id="digitsLine"></div>
+  </section>
+
+  <section class="card">
+    <h2>روش غیاث‌الدین کاشانی</h2>
+    <div class="kashani-row">
+      <p class="kashani-text">
+        هفتصد سال پیش، ریاضی‌دان ایرانی غیاث‌الدین جمشید کاشانی برای پیدا کردن عدد پی، دور یک دایره، چندضلعی‌هایی رسم کرد؛
+        یکی از داخل (محاط) و یکی از خارج (محیط). هرچه تعداد اضلاع چندضلعی بیشتر شود، شکل آن به دایره شبیه‌تر می‌شود
+        و محیطش به محیط دایره نزدیک‌تر. کاشانی این کار را آن‌قدر تکرار کرد تا به چندضلعی‌ای با میلیاردها ضلع رسید
+        و توانست عدد پی را تا ۱۶ رقم اعشار، فقط با جمع و تفریق و ریشه‌گرفتن، به‌دست بیاورد؛ کاری که تا قرن‌ها بعد
+        هیچ‌کس به آن دقت نرسید.
+      </p>
+      <div class="kashani-anim">
+        <svg id="demoSvg" viewBox="0 0 200 200">
+          <circle class="circ" cx="100" cy="100" r="78"></circle>
+          <polygon id="demoOut" class="poly-out" points=""></polygon>
+          <polygon id="demoIn" class="poly-in" points=""></polygon>
+        </svg>
+        <div class="cap" id="demoCap"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>ساخته‌شده توسط رایان رضائی - هشتم، دستغیب یک - استاد جوادی</footer>
+</div>
+
+<script>
+function poly(cx,cy,R,n,phaseDeg){
+  const pts=[];
+  for(let k=0;k<n;k++){
+    const a=(phaseDeg + k*360/n) * Math.PI/180;
+    pts.push((cx+R*Math.cos(a)).toFixed(2)+","+(cy+R*Math.sin(a)).toFixed(2));
+  }
+  return pts.join(" ");
+}
+function piDigitsCompare(est){
+  const real="3.14159265358979323846";
+  const a=est.toFixed(15), b=real.slice(0,17);
+  let html="";
+  for(let i=0;i<a.length;i++){
+    const same = a[i]===b[i];
+    html += `<span class="${same?'ok':'bad'}">${a[i]}</span>`;
+    if(!same) break;
+  }
+  return html;
+}
+
+const nSlider=document.getElementById('nSlider');
+const nLabel=document.getElementById('nLabel');
+const polyIn=document.getElementById('polyIn');
+const polyOut=document.getElementById('polyOut');
+const pInEl=document.getElementById('pIn');
+const pOutEl=document.getElementById('pOut');
+const piEstEl=document.getElementById('piEst');
+const digitsLine=document.getElementById('digitsLine');
+
+function update(){
+  const n=parseInt(nSlider.value,10);
+  nLabel.textContent=n;
+  const R=140, cx=180, cy=180;
+  const Rout = R/Math.cos(Math.PI/n);
+  polyIn.setAttribute('points', poly(cx,cy,R,n,-90));
+  polyOut.setAttribute('points', poly(cx,cy,Rout,n,-90+180/n));
+
+  const pIn = n*2*R*Math.sin(Math.PI/n);
+  const pOut = n*2*R*Math.tan(Math.PI/n);
+  const piEst = (pIn+pOut)/(4*R);
+
+  pInEl.textContent = pIn.toFixed(2);
+  pOutEl.textContent = pOut.toFixed(2);
+  piEstEl.textContent = piEst.toFixed(8);
+  digitsLine.innerHTML = "عدد درست پی: " + piDigitsCompare(piEst) + " …";
+}
+nSlider.addEventListener('input', update);
+update();
+
+// Kashani demo animation: looping through increasing side counts
+const demoIn=document.getElementById('demoIn');
+const demoOut=document.getElementById('demoOut');
+const demoCap=document.getElementById('demoCap');
+const seq=[3,4,6,10,18,32,64];
+let si=0;
+function demoStep(){
+  const n=seq[si];
+  const R=78, cx=100, cy=100;
+  const Rout=R/Math.cos(Math.PI/n);
+  demoIn.setAttribute('points', poly(cx,cy,R,n,-90));
+  demoOut.setAttribute('points', poly(cx,cy,Rout,n,-90+180/n));
+  const est=(n*2*R*Math.sin(Math.PI/n) + n*2*R*Math.tan(Math.PI/n))/(4*R);
+  demoCap.textContent = "n=" + n + "   π ≈ " + est.toFixed(6);
+  si=(si+1)%seq.length;
+}
+demoStep();
+setInterval(demoStep, 1400);
+</script>
+</body>
+</html>
