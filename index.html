@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --sky1:#eaf6ff; --sky2:#ffffff;
+  --sky1:#8ffffd; --sky2:#ffffff;
   --navy:#0e1f4b; --navy2:#13285e;
   --orange:#ff8a3d; --orange2:#ffb37a;
   --ink:#0e1f4b; --paper:#ffffff;
@@ -30,7 +30,7 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{
   margin:0; min-height:100%;
   font-family:'Vazirmatn',sans-serif;
-  background:linear-gradient(160deg,var(--sky1),var(--sky2) 60%);
+  background:linear-gradient(110deg,var(--sky1),var(--sky2) 60%);
   color:var(--ink);
   display:flex; justify-content:center;
 }
@@ -217,7 +217,7 @@ update();
 const demoIn=document.getElementById('demoIn');
 const demoOut=document.getElementById('demoOut');
 const demoCap=document.getElementById('demoCap');
-const seq=[3,4,6,10,18,32,64];
+const seq=[3,4,8,16,32,64];
 let si=0;
 function demoStep(){
   const n=seq[si];
@@ -230,7 +230,5 @@ function demoStep(){
   si=(si+1)%seq.length;
 }
 demoStep();
-setInterval(demoStep, 1400);
+setInterval(demoStep, 5000);
 </script>
-</body>
-</html>
